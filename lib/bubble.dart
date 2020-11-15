@@ -18,6 +18,9 @@ class _BubbleState extends State<Bubble> {
   List<Task> tasks = [
     new Task(name: "Laundry", done: false, description: ""),
     new Task(name: "hide", done: false, description: ""),
+    new Task(name: "yeah", done: false, description: ""),
+    new Task(name: "yeah", done: false, description: ""),
+    new Task(name: "yeah", done: false, description: ""),
   ];
 
   ScrollController _controller;
@@ -71,8 +74,8 @@ class _BubbleState extends State<Bubble> {
           children: [
             Opacity(
               opacity: hide,
-              child: SizedBox(
-                height: 200,
+              child: Container(
+                height: 300,
                 width: 300,
                 child: ListView.builder(
                   controller: _controller,
@@ -110,7 +113,7 @@ class _BubbleState extends State<Bubble> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10)),
                                 Text(
-                                  "Task ${index + 1}",
+                                  tasks[index].name,
                                   style: GoogleFonts.muli(
                                     fontSize: 14,
                                     color: Colors.black,
