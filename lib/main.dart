@@ -14,6 +14,12 @@ class BubbleTaskApp extends StatelessWidget {
         backgroundColor: Colors.white,
         body: Stack(children: [
           Bubble(),
+          Positioned(
+              bottom: 25,
+              left: 185,
+              child: FloatingActionButton(
+                onPressed: () {},
+              )),
         ]),
       ),
     );
