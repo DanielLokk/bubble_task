@@ -15,18 +15,31 @@ class BubbleTaskApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
+          /* elements on the screen */
           children: [
             Bubble(),
+
+            /* add button */
             SpeedDial(
+              /* positioning add button */
               marginRight: 50,
               marginBottom: 50,
+
+              /* decoration add button */
               animatedIcon: AnimatedIcons.menu_close,
               backgroundColor: Colors.amber,
-              animationSpeed: 100,
-              shape: CircleBorder(),
+              animationSpeed: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+
+              /* add task or bubble buttons */
               children: [
-                SpeedDialChild(),
-                SpeedDialChild(),
+                SpeedDialChild(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                ),
+                SpeedDialChild(shape: BeveledRectangleBorder()),
               ],
             ),
           ],

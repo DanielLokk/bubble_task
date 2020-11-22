@@ -13,7 +13,7 @@ class _BubbleState extends State<Bubble> {
   double yOffset = 175.0;
   double xOffset = 50.0;
 
-  double hide = 1;
+  double _hide = 1;
 
   List<Task> tasks = [
     new Task(name: "Laundry", done: false, description: ""),
@@ -25,6 +25,7 @@ class _BubbleState extends State<Bubble> {
 
   ScrollController _controller;
 
+  /* necessary due to list builder error: Future is already... */
   _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
@@ -49,38 +50,50 @@ class _BubbleState extends State<Bubble> {
 
   @override
   Widget build(BuildContext context) {
+    /* positioning of bubble dynamically */
     return Positioned(
       top: yOffset,
       left: xOffset,
+
+      /* make bubble draggable */
       child: Draggable<Widget>(
+        /* drag functon */
         onDraggableCanceled: (velocity, offset) {
           setState(() {
             yOffset = offset.dy;
             xOffset = offset.dx;
           });
         },
+
+        /* bubble when being dragged */
         feedback: FloatingActionButton(
           backgroundColor: Color.fromRGBO(61, 179, 221, 1),
           onPressed: () {},
         ),
-        childWhenDragging: Opacity(
-          opacity: 0.1,
-          child: FloatingActionButton(
-            backgroundColor: Color.fromRGBO(61, 179, 221, 1),
-            onPressed: () {},
-          ),
-        ),
+
+        /* element left behind, it's a container for it to be invisible */
+        childWhenDragging: Container(),
+
+        /* stack of elements that shape the bubble task */
         child: Stack(
           children: [
+            /* tasks object, hid when _hide is 1 */
             Opacity(
-              opacity: hide,
+              opacity: _hide,
+
+              /* container over list for it to have a layout, don't know why */
               child: Container(
                 height: 300,
                 width: 300,
+
+                /* dynamic list of tasks */
                 child: ListView.builder(
+                  /* scrolling controller */
                   controller: _controller,
                   itemCount: tasks.length,
                   shrinkWrap: true,
+
+                  /* invisible container, with icon and label on a row */
                   itemBuilder: (context, index) => Material(
                     child: InkWell(
                       onTap: () {
@@ -130,11 +143,13 @@ class _BubbleState extends State<Bubble> {
                 ),
               ),
             ),
+
+            /* button that is shown always inside the stack */
             FloatingActionButton(
               backgroundColor: Color.fromRGBO(61, 179, 221, 1),
               onPressed: () {
                 setState(() {
-                  hide = (hide == 1) ? 0 : 1;
+                  _hide = (_hide == 1) ? 0 : 1;
                 });
               },
             ),
