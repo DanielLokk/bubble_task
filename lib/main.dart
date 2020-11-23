@@ -28,18 +28,17 @@ class BubbleTaskApp extends StatelessWidget {
               /* decoration add button */
               animatedIcon: AnimatedIcons.menu_close,
               backgroundColor: Colors.amber,
-              animationSpeed: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
+              animationSpeed: 250,
+              shape: CircleBorder(),
 
               /* add task or bubble buttons */
               children: [
                 SpeedDialChild(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                  backgroundColor: Colors.amber,
+                  child: Icon(Icons.bubble_chart),
                 ),
-                SpeedDialChild(shape: BeveledRectangleBorder()),
+                SpeedDialChild(
+                    backgroundColor: Colors.amber, child: Icon(Icons.add)),
               ],
             ),
           ],
