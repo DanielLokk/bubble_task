@@ -7,13 +7,23 @@ import 'package:google_fonts/google_fonts.dart';
 class Bubble extends StatefulWidget {
   @override
   _BubbleState createState() => _BubbleState();
+
+  /// children tasks from low to high
+  final List<Widget> children;
+
+  /// the speed of the animation
+  final int animationSpeed;
+
+  Bubble({this.children = const [], this.animationSpeed = 150});
 }
 
-class _BubbleState extends State<Bubble> {
+class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
   double yOffset = 175.0;
   double xOffset = 50.0;
 
-  double _hide = 1;
+  ScrollController _controller;
+  AnimationController _animationController;
+  double _open = 1;
 
   List<Task> tasks = [
     new Task(name: "Laundry", done: false, description: ""),
@@ -22,8 +32,6 @@ class _BubbleState extends State<Bubble> {
     new Task(name: "yeah", done: false, description: ""),
     new Task(name: "yeah", done: false, description: ""),
   ];
-
-  ScrollController _controller;
 
   /* necessary due to list builder error: Future is already... */
   _scrollListener() {
@@ -44,8 +52,32 @@ class _BubbleState extends State<Bubble> {
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      duration: _calculateMainControllerDuration(),
+      vsync: this,
+    );
     _controller = ScrollController();
     _controller.addListener(_scrollListener); //the listener for up and down.
+  }
+
+  Duration _calculateMainControllerDuration() => Duration(
+      milliseconds: widget.animationSpeed +
+          widget.children.length * (widget.animationSpeed / 5).round());
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _performAnimation() {
+    if (!mounted) return;
+    if (_open == 0) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
   }
 
   @override
@@ -79,7 +111,7 @@ class _BubbleState extends State<Bubble> {
           children: [
             /* tasks object, hid when _hide is 1 */
             Opacity(
-              opacity: _hide,
+              opacity: _open,
 
               /* container over list for it to have a layout, don't know why */
               child: Container(
@@ -149,7 +181,7 @@ class _BubbleState extends State<Bubble> {
               backgroundColor: Color.fromRGBO(61, 179, 221, 1),
               onPressed: () {
                 setState(() {
-                  _hide = (_hide == 1) ? 0 : 1;
+                  _open = (_open == 1) ? 0 : 1;
                 });
               },
             ),
