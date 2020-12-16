@@ -88,104 +88,112 @@ class _BubbleState extends State<Bubble> with SingleTickerProviderStateMixin {
       left: xOffset,
 
       /* make bubble draggable */
-      child: Draggable<Widget>(
-        /* drag functon */
-        onDraggableCanceled: (velocity, offset) {
-          setState(() {
-            yOffset = offset.dy;
-            xOffset = offset.dx;
-          });
+      child: Listener(
+        onPointerDown: (PointerDownEvent event) {
+          print(event.position);
         },
+        onPointerMove: (PointerMoveEvent event) {
+          print(event.position);
+        },
+        child: Draggable<Widget>(
+          /* drag functon */
+          onDraggableCanceled: (velocity, offset) {
+            setState(() {
+              yOffset = offset.dy;
+              xOffset = offset.dx;
+            });
+          },
 
-        /* bubble when being dragged */
-        feedback: FloatingActionButton(
-          backgroundColor: Color.fromRGBO(61, 179, 221, 1),
-          onPressed: () {},
-        ),
+          /* bubble when being dragged */
+          feedback: FloatingActionButton(
+            backgroundColor: Color.fromRGBO(61, 179, 221, 1),
+            onPressed: () {},
+          ),
 
-        /* element left behind, it's a container for it to be invisible */
-        childWhenDragging: Container(),
+          /* element left behind, it's a container for it to be invisible */
+          childWhenDragging: Container(),
 
-        /* stack of elements that shape the bubble task */
-        child: Stack(
-          children: [
-            /* tasks object, hid when _hide is 1 */
-            Opacity(
-              opacity: _open,
+          /* stack of elements that shape the bubble task */
+          child: Stack(
+            children: [
+              /* tasks object, hid when _hide is 1 */
+              Opacity(
+                opacity: _open,
 
-              /* container over list for it to have a layout, don't know why */
-              child: Container(
-                height: 300,
-                width: 300,
+                /* container over list for it to have a layout, don't know why */
+                child: Container(
+                  height: 300,
+                  width: 300,
 
-                /* dynamic list of tasks */
-                child: ListView.builder(
-                  /* scrolling controller */
-                  controller: _controller,
-                  itemCount: tasks.length,
-                  shrinkWrap: true,
+                  /* dynamic list of tasks */
+                  child: ListView.builder(
+                    /* scrolling controller */
+                    controller: _controller,
+                    itemCount: tasks.length,
+                    shrinkWrap: true,
 
-                  /* invisible container, with icon and label on a row */
-                  itemBuilder: (context, index) => Material(
-                    child: InkWell(
-                      onTap: () {
-                        print(tasks[index].name);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(22, /*40*/ 0, 0, 0),
-                        decoration: BoxDecoration(color: Colors.white),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 265.0, top: 10, bottom: 0, left: 0),
-                              child: Container(
-                                height: 20.0,
-                                width: 0.2,
-                                color: Colors.black,
+                    /* invisible container, with icon and label on a row */
+                    itemBuilder: (context, index) => Material(
+                      child: InkWell(
+                        onTap: () {
+                          print(tasks[index].name);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(22, /*40*/ 0, 0, 0),
+                          decoration: BoxDecoration(color: Colors.white),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 265.0, top: 10, bottom: 0, left: 0),
+                                child: Container(
+                                  height: 20.0,
+                                  width: 0.2,
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  size: 13,
-                                  color: Color.fromRGBO(61, 179, 221, 1),
-                                ),
-                                Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10)),
-                                Text(
-                                  tasks[index].name,
-                                  style: GoogleFonts.muli(
-                                    fontSize: 14,
-                                    color: Colors.black,
-                                    decoration: TextDecoration.none,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 13,
+                                    color: Color.fromRGBO(61, 179, 221, 1),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10)),
+                                  Text(
+                                    tasks[index].name,
+                                    style: GoogleFonts.muli(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                      decoration: TextDecoration.none,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            /* button that is shown always inside the stack */
-            FloatingActionButton(
-              backgroundColor: Color.fromRGBO(61, 179, 221, 1),
-              onPressed: () {
-                setState(() {
-                  _open = (_open == 1) ? 0 : 1;
-                });
-              },
-            ),
-          ],
+              /* button that is shown always inside the stack */
+              FloatingActionButton(
+                backgroundColor: Color.fromRGBO(61, 179, 221, 1),
+                onPressed: () {
+                  setState(() {
+                    _open = (_open == 1) ? 0 : 1;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
